@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    color: #0e1111;
+    background-color: #faf8f5;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    text-align: center;
+}
+
+.user:hover .absolute {
+    display: block;
+}
+
+html {
+    scroll-behavior: smooth;
+}
