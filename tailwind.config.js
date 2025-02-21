@@ -18,7 +18,7 @@ export default {
             colors: {
                 cerna: "#0E1111", // Přidání vlastní barvy
                 bila: "#FAF8F5",
-                hneda: "#583622",
+                hneda: "#4c311c",
                 cervena: "#8B0000",
                 zluta: "#FFD700",
                 oranzova: "#F17F29",
@@ -26,6 +26,10 @@ export default {
             screens: {
                 lg: "1100px", // Nastavte vlastní hodnotu pro lg breakpoint
                 "2xl": "1600px", // Nastavte vlastní hodnotu pro lg breakpoint
+            },
+            boxShadow: {
+                xl: "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
+                "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.3)",
             },
         },
     },

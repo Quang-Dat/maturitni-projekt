@@ -9,6 +9,116 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        main {
+            background: #fff;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #444;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .items-start {
+            align-items: flex-start;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .font-extrabold {
+            font-weight: 800;
+        }
+
+        .text-3xl {
+            font-size: 1.875rem;
+        }
+
+        .mt-1 {
+            margin-top: 0.25rem;
+        }
+
+        .mt-10 {
+            margin-top: 2.5rem;
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem;
+        }
+
+        .my-1 {
+            margin: 0.25rem 0;
+        }
+
+        .p-20 {
+            padding: 20px;
+        }
+
+        .table-header {
+            font-weight: bold;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .table-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 
@@ -26,7 +136,7 @@
                 <p class="my-1">Adresa: Karla IV. 13, 530 02 Pardubice I</p>
                 <p class="my-1">Telefon: +420 123 456 789 </p>
                 <p class="my-1">Email: info@narohu.cz </p>
-                <p class="my-1">www: <a href="https://lequangdat.eu/">narohu.cz</a></p>
+                <p class="my-1">www: <a href="https://lequanda21.mp.spse-net.cz/">lequanda21.mp.spse-net.cz</a></p>
                 <p class="my-1">IČO: 12345678</p>
                 <p class="mt-1">DIČ: CZ12345678</p>
             </div>
@@ -36,7 +146,6 @@
                 <p class="my-1">Adresa: as 55, 55555 Přelouč</p>
                 <p class="my-1">Email: datlequan@seznam.cz</p>
                 <p class="mt-1">Telefon: 74136985</p>
-
             </div>
         </div>
 
@@ -46,7 +155,6 @@
                 <p class="my-1">Datum vystavení: {{$objednavka->created_at}}</p>
                 <p class="my-1">Datum uskut. zdaň. plnění: {{$objednavka->created_at}}</p>
                 <p class="my-1">Datum splatnosti: {{$objednavka->created_at}}</p>
-                <p class="my-1">Datum převzetí: {{$objednavka->created_at}}</p>
                 <p class="mt-1">Způsob úhrady: {{$objednavka->typ_platby->nazev}}</p>
             </div>
             <div class="flex flex-col items-start">

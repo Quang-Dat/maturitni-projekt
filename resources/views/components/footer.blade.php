@@ -55,7 +55,7 @@
         </div>
     </div>
     <div class=" flex flex-col items-center py-10">
-        <p class="text-2xl font-extrabold">Vytvořil: Le Quang Dat 4.F</p>
-        <p>Copyright &copy; 2025 Všechna práva vyhrazena</p>
+        <p class="text-2xl font-extrabold text-center">Vytvořil: Le Quang Dat 4.F</p>
+        <p class="text-center">Copyright &copy; 2025 Všechna práva vyhrazena</p>
     </div>
 </footer>

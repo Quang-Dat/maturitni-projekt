@@ -37,10 +37,8 @@ class RecenzeController extends Controller
                 'user_id' => Auth::id(),
             ]);
 
-            // Uložení flash zprávy o úspěchu
             session()->flash("success", "Recenze byla úspěšně uložena.");
         } catch (\Exception $e) {
-            // Uložení flash zprávy o neúspěchu
             session()->flash("error", "Došlo k chybě při ukládání recenze: " . $e->getMessage());
         }
         return redirect()->back();

@@ -6,29 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Restaurace Na Rohu</title>
+    <link rel="icon" href="{{ asset("/storage/img/logo.jpg") }}" type="image/jpg" sizes="32x32">
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @vite(['resources/css/welcome.css'])
-    @vite(['resources/js/nav.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js','resources/css/welcome.css','resources/js/welcome.js','resources/js/nav.js'])
     @endif
 
 </head>
 
 <body>
     <x-nav-bar></x-nav-bar>
+    @if (session('success'))
+    <div class="bg-green-100 text-green-700 p-4 rounded z-20">
+        {{ session('success') }}
+    </div>
+    @elseif (session('error'))
+    <div class="bg-red-100 text-red-700 p-4 rounded z-20">
+        {{ session('error') }}
+    </div>
+    @endif
     <main>
         <section id="uvod">
             <div class="relative h-screen w-full">
                 <img class="-z-10 h-screen w-full object-cover" src="{{ asset('storage/img/uvodni-obr.jpg') }}" alt="">
                 <div class="absolute inset-0 bg-black opacity-50"></div>
             </div>
-            <!-- right-56 -->
             <div class="w-[90%] lg:w-max flex flex-col items-center lg:items-start justify-center text-bila absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:left-auto lg:right-56 lg:-translate-x-0">
                 <h1 class="mb-2 text-4xl lg:text-7xl font-extrabold text-center lg:text-start">Restaurace Na Rohu</h1>
                 <p class="my-2 text-2xl font-bold text-center lg:text-start">Tradiční česká kuchyně v útulném prostředí přímo v srdci města.</p>
@@ -44,7 +50,9 @@
 
             @foreach($menu_kategorie as $kategorie)
             <div class="w-full flex flex-col items-center mt-12">
-                <h3 class="text-2xl font-extrabold self-center"> {{ $kategorie->nazev }}</h3>
+                <h3 class="text-2xl font-extrabold self-center">
+                    {{ ucfirst($kategorie->nazev) }}
+                </h3>
                 @foreach($menu as $jidlo)
 
                 @if ($jidlo->kategorie_id == $kategorie->id)
@@ -90,7 +98,12 @@
             <h2 class="text-3xl mb-20 font-extrabold">O nás</h2>
             <div class="flex flex-col lg:flex-row justify-around items-center">
                 <img class="w-[90%] lg:w-[40%] object-cover mb-5 lg:mb-0" src="{{ asset('storage/img/uvodni-obr.jpg') }}" alt="">
-                <p class="w-[90%] lg:w-[40%]">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quibusdam blanditiis nulla, dicta consequatur reiciendis perspiciatis totam explicabo expedita dolore eaque doloribus assumenda repellendus aut dolorum error cumque commodi dolor? Ad. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quibusdam blanditiis nulla, dicta consequatur reiciendis perspiciatis totam explicabo expedita dolore eaque doloribus assumenda repellendus aut dolorum error cumque commodi dolor? Ad Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quibusdam blanditiis nulla, dicta consequatur reiciendis perspiciatis totam explicabo expedita dolore eaque doloribus assumenda repellendus aut dolorum error cumque commodi dolor? Ad Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quibusdam blanditiis nulla, dicta consequatur reiciendis perspiciatis totam explicabo expedita dolore eaque doloribus assumenda repellendus aut dolorum error cumque commodi dolor? Ad</p>
+                <p class="w-[90%] lg:w-[40%]">
+                    Vítejte v Restauraci Na Rohu, kde se snoubí kouzlo tradiční české kuchyně s příjemnou atmosférou. Najdete nás přímo v srdci města, kde pro vás připravujeme poctivá jídla podle osvědčených receptů našich babiček.
+
+                    Přijďte si pochutnat na klasických českých specialitách, jako je svíčková, křupavé vepřo knedlo zelo nebo čerstvě smažený řízek. K tomu nabízíme výběr z kvalitních českých piv a domácích limonád, které skvěle doplní váš gurmánský zážitek.
+
+                    Naše útulné prostředí je ideální pro rodinné obědy, posezení s přáteli i romantické večeře. Přijďte ochutnat pravou chuť Česka – těšíme se na vaši návštěvu!</p>
             </div>
         </section>
 
@@ -98,49 +111,63 @@
             <h2 class="text-3xl font-extrabold mb-10">Galerie</h2>
             <div class="flex flex-col items-center">
                 <div class="flex items-center justify-around flex-col md:flex-row">
-                    <img class="w-[90%] md:w-[40%] object-cover my-10" src="{{ asset('storage/img/uvodni-obr.jpg') }}" alt="">
-                    <img class="w-[90%] md:w-[40%] object-cover my-10" src="{{ asset('storage/img/uvodni-obr.jpg') }}" alt="">
+                    <img class="w-[90%] md:w-[40%] object-cover my-10 aspect-video" src="{{ asset('storage/img/galerie/outdoor.jpg') }}" alt="">
+                    <img class="w-[90%] md:w-[40%] object-cover my-10 aspect-video" src="{{ asset('storage/img/galerie/indoor.jpg') }}" alt="">
                 </div>
                 <div class="flex items-center justify-around flex-col md:flex-row">
-                    <img class="w-[90%] md:w-[40%] object-cover my-10" src="{{ asset('storage/img/uvodni-obr.jpg') }}" alt="">
-                    <img class="w-[90%] md:w-[40%] object-cover my-10" src="{{ asset('storage/img/uvodni-obr.jpg') }}" alt="">
-                </div>
-                <div class="flex items-center justify-around flex-col md:flex-row">
-                    <img class="w-[90%] md:w-[40%] object-cover my-10" src="{{ asset('storage/img/uvodni-obr.jpg') }}" alt="">
-                    <img class="w-[90%] md:w-[40%] object-cover my-10" src="{{ asset('storage/img/uvodni-obr.jpg') }}" alt="">
+                    <img class="w-[90%] md:w-[40%] object-cover my-10 aspect-video" src="{{ asset('storage/img/galerie/man-food.jpg') }}" alt="">
+                    <img class="w-[90%] md:w-[40%] object-cover my-10 aspect-video" src="{{ asset('storage/img/galerie/food.jpg') }}" alt="">
                 </div>
             </div>
         </section>
 
-        <section class="bg-cervena my-20 py-20 flex flex-col items-center text-bila" id="recenze">
+        <section class="bg-cervena my-20 py-20 flex flex-col items-center text-bila" id="recenze" data-pocet-recenzi="{{ count($recenze) }}">
             <div class="mb-20">
                 <h2 class="text-3xl font-extrabold mb-5">Recenze</h2>
                 <a class="py-1 px-3 rounded-lg mt-7 bg-zluta text-cerna font-extrabold text-xl" href="{{route("recenze")}}">Napište recenzi</a>
             </div>
-            <div class="w-full flex items-center justify-around">
-                <button id="recenze-leva" class="bg-oranzova rounded-full ">
+
+            <div class="relative w-full px-20">
+                <button id="recenze-leva" class="fixed-button left-0 md:left-32 bg-oranzova/50 hover:bg-oranzova rounded-full z-20">
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                     </svg>
                 </button>
-                @foreach($recenze as $radek)
-                <div class=" {{$loop->index > 0 ? "hidden":" w-[60%] flex flex-col items-center"}}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-circle mb-2" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                    </svg>
-                    <h3 class="my-2 font-extrabold text-xl">{{$radek->user->email}}</h3>
-                    <div class="my-2"> {{$radek->hodnoceni}} </div>
-                    <p class="mt-2 text-center">{{$radek->recenze}} </p>
+
+                <div class="flex justify-center items-center min-h-[200px]">
+                    @foreach($recenze as $radek)
+                    <div id="recenze-{{$loop->index}}" class="recenze-item {{$loop->index > 0 ? 'hidden' : ''}} w-[85%] md:w-[60%] flex flex-col items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-circle mb-2" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                        </svg>
+                        <h3 class="my-2 font-bold">{{$radek->user->email}}</h3>
+                        <div class="my-2"> {{$radek->hodnoceni}}/5 </div>
+                        <p class="mt-2 text-center">{{$radek->recenze}} </p>
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
-                <button id="recenze-prava" class="bg-oranzova rounded-full rotate-180">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+
+                <button id="recenze-prava" class="fixed-button right-0 md:right-32 bg-oranzova/50 hover:bg-oranzova rounded-full z-20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-left-short rotate-180" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                     </svg>
                 </button>
             </div>
         </section>
+
+        <style>
+            .fixed-button {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                transition: all 0.3s ease;
+            }
+
+            .recenze-item {
+                transition: opacity 0.3s ease;
+            }
+        </style>
 
         <section id="kontakty" class="my-20 py-20 flex flex-col items-center">
             <h2 class="text-3xl font-extrabold mb-20">Kontakty</h2>
@@ -184,7 +211,10 @@
                 </div>
                 <iframe class="w-[90%] md:w-[600px] md:h-[450px]" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2562.6110649708658!2d15.777180876913269!3d50.037383317019106!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470dcced2c0f99a9%3A0x13e68abed8193137!2sSP%C5%A0E%20a%20VO%C5%A0%20Pardubice!5e0!3m2!1scs!2scz!4v1730193420527!5m2!1scs!2scz" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
-            <form class="p-10 mt-40 flex flex-col items-center bg-cervena rounded-lg text-bila w-[80%] md:w-1/2" action="">
+            <form class="p-10 mt-40 flex flex-col items-center bg-cervena rounded-lg text-bila w-[80%] md:w-1/2"
+                action="{{ route('zprava.email') }}"
+                method="POST">>
+                @csrf
                 <h3 class="text-3xl font-extrabold mb-5">Napište nám</h3>
                 <div class="flex flex-col items-start w-full my-3">
                     <label class="mb-2 text-xl font-extrabold" for="emailID">Email:</label>

@@ -5,7 +5,6 @@
         </h2>
     </x-slot>
 
-    <!-- Zobrazení chybových zpráv -->
     @if ($errors->any())
     <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
         <ul>
@@ -16,7 +15,6 @@
     </div>
     @endif
 
-    <!-- Flash zprávy o úspěchu nebo chybě -->
     @if (session('success'))
     <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
         {{ session('success') }}
@@ -27,9 +25,8 @@
     </div>
     @endif
 
-    <!-- Formulář pro přidání produktu -->
     <form action="{{ route('napojovy_listek.store') }}" method="POST" class="max-w-lg mt-8 mx-auto bg-white p-6 rounded shadow-md">
-        @csrf <!-- Ochrana proti CSRF útokům -->
+        @csrf
 
         <div class="mb-4">
             <label for="nazev" class="block text-gray-700">Název nápoje:</label>
@@ -48,7 +45,21 @@
 
         <div class="mb-4">
             <label for="kategorie" class="block text-gray-700">Kategorie:</label>
-            <input type="text" name="kategorie" id="kategorie" value="{{ old('kategorie') }}" required class="w-full mt-1 p-2 border border-gray-300 rounded">
+            <input
+                autocomplete="off"
+                type="text"
+                name="kategorie"
+                id="kategorie"
+                list="kategorie-list"
+                value="{{ old('kategorie') }}"
+                required
+                class="w-full mt-1 p-2 border border-gray-300 rounded">
+
+            <datalist id="kategorie-list">
+                @foreach($kategorie as $kat)
+                <option value="{{ $kat->nazev }}">
+                    @endforeach
+            </datalist>
         </div>
 
         <div class="flex justify-end">

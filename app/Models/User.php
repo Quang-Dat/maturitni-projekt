@@ -24,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isAdmin()
     {
-        return $this->role === 'admin'; // Předpokládáme, že máte sloupec 'role' v tabulce uživatelů
+        return $this->role === 'admin';
     }
 
     /**

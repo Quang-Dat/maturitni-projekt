@@ -1,6 +1,6 @@
 <header>
     <nav class="w-full flex h-24 items-center justify-between px-4 2xl:px-20 bg-hneda text-bila">
-        <a class="font-playfair text-3xl 2xl:text-5xl font-extrabold" href="{{ route('index') }}">Restaurace Na Rohu</a>
+        <a class="h-full aspect-square" href="{{ route('index') }}"><img src="{{ asset("/storage/img/logo.jpg") }}" alt="logo"></a>
         <div class="hidden 2xl:flex items-center">
             <a class="font-bold mx-5" href="{{route("index")}}#jidla">Jídelní lístek</a>
             <a class="font-bold mx-5" href="{{route("index")}}#piti">Nápojový lístek</a>
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <!-- Mobile menu button -->
+
         <div class="2xl:hidden flex items-center">
             <button id="menu-toggle" class="text-bila focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
@@ -43,7 +43,7 @@
             </button>
         </div>
     </nav>
-    <!-- Mobile menu -->
+
     <div id="mobile-menu" class="hidden 2xl:hidden z-20 absolute w-full bg-hneda text-bila">
         <a class="block px-4 py-2 font-bold" href="{{route("index")}}#jidla">Jídelní lístek</a>
         <a class="block px-4 py-2 font-bold" href="{{route("index")}}#piti">Nápojový lístek</a>

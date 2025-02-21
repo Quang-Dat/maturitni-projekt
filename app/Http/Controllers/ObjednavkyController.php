@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Dekovna;
+use App\Mail\Pripraveno;
 use App\Models\Objednavky;
 use App\Models\Prod_V_Obj;
 use App\Models\StaleMenu;
@@ -10,6 +12,7 @@ use App\Models\TypPlatby;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View as FacadesView;
 use Spatie\Browsershot\Browsershot;
 
@@ -45,7 +48,6 @@ class ObjednavkyController extends Controller
 
             return response()->download('objednavka.pdf');
         } catch (\Exception $e) {
-            // Uložení flash zprávy o neúspěchu
             Log::error('PDF generation error: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'Došlo k chybě');
@@ -56,7 +58,17 @@ class ObjednavkyController extends Controller
      */
     public function index()
     {
-        //
+        $objednavky = Objednavky::with('prodVObj')
+            ->orderBy('doruceno', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        foreach ($objednavky as $objednavka) {
+            $objednavka->total_price = $objednavka->prodVObj->sum(function ($produkt) {
+                return $produkt->pocet * $produkt->cena;
+            });
+        }
+        return view('admin.objednavky.index', compact('objednavky'));
     }
 
     /**
@@ -75,6 +87,7 @@ class ObjednavkyController extends Controller
     public function store(Request $request)
     {
         try {
+
             $req = $request->validate([
                 'jmeno' => 'required|string',
                 'prijmeni' => 'required|string',
@@ -96,11 +109,14 @@ class ObjednavkyController extends Controller
                 'typ_dopravy' => 'required|integer',
             ]);
 
+            $cleanedPhone = preg_replace('/\D+/', '', $request->telefon);
+            $formattedPhone = '+420 ' . substr($cleanedPhone, 0, 3) . ' ' . substr($cleanedPhone, 3, 3) . ' ' . substr($cleanedPhone, 6);
+
             $obj = Objednavky::create([
                 'jmeno' => $request->jmeno,
                 'prijmeni' => $request->prijmeni,
                 'email' => $request->email,
-                'telefon' => $request->telefon,
+                'telefon' => $formattedPhone,
                 'ulice' => $request->ulice,
                 'cp' => $request->cp,
                 'psc' => $request->psc,
@@ -120,27 +136,65 @@ class ObjednavkyController extends Controller
                 if ($product) {
                     Prod_V_Obj::create([
                         'pocet' => $quantity,
-                        'cena' => $product->cena, // Ensure 'price' is a column in your StaleMenu table
+                        'cena' => $product->cena,
                         'stale_menu_id' => $id,
                         'objednavky_id' => $idObjednavky,
                     ]);
                 }
             }
 
+            $produkty = Prod_V_Obj::where("objednavky_id", $idObjednavky)->with("menu_id")->get();
+            $cena = 0;
+
+            foreach ($produkty as $produkt) {
+                $cena += $produkt->cena * $produkt->pocet;
+            }
+
+            $data = ["objednavka" => $obj, "produkty" => $produkty, "cena" => $cena];
+            $html = FacadesView::make('pdf.objednavkaPDF', $data)->render();
+
+            $pdfPath = public_path("storage/faktury/objednavka_{$idObjednavky}.pdf");
+
+            Browsershot::html($html)
+                ->setNodeBinary('C:\Program Files\nodejs\node.exe')
+                ->setNpmBinary('C:\Program Files\nodejs\npm.cmd')
+                ->save($pdfPath);
+
+            Mail::to($obj->email)->send(new Dekovna($obj, $pdfPath));
 
             return view("uspech", ["id" => $idObjednavky])->with('success', 'Vaše objednávka byla úspěšně odeslána');
         } catch (\Exception $e) {
-            // Uložení flash zprávy o neúspěchu
-            return redirect()->back()->with('error', 'Došlo k chybě při odeslání objednávky');
+            return redirect()->back()->with('error', 'Došlo k chybě: ' . $e->getMessage());
         }
     }
-
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {}
+    public function show(string $id)
+    {
+        $objednavka = Objednavky::with(['prodVObj.menu_id', 'typ_platby', 'typ_dopravy'])
+            ->findOrFail($id);
 
+        $objednavka->total_price = $objednavka->prodVObj->sum(function ($produkt) {
+            return $produkt->pocet * $produkt->cena;
+        });
+
+
+        return view('admin.objednavky.show', compact('objednavka'));
+    }
+
+
+    public function dokonceni(string $id)
+    {
+        $objednavka = Objednavky::findOrFail($id);
+        $objednavka->doruceno = true;
+        $objednavka->save();
+
+        Mail::to($objednavka->email)->send(new Pripraveno($objednavka));
+
+        return redirect()->back()->with('success', 'Objednávka byla označena jako dokončená a email byl odeslán!');
+    }
     /**
      * Show the form for editing the specified resource.
      */

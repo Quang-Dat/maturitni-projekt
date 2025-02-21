@@ -6,6 +6,7 @@ use App\Http\Controllers\NapojovyListekController;
 use App\Http\Controllers\ObjednavkyController;
 use App\Http\Controllers\RecenzeController;
 use App\Http\Controllers\StaleMenuController;
+use App\Http\Controllers\StatistikyController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Models\Objednavky;
 use Illuminate\Support\Facades\Route;
@@ -20,14 +21,14 @@ Route::get("/produkty", [KosikController::class, "produkty"])->name("produkty");
 Route::get('/kosik', [ObjednavkyController::class, 'create'])->name('kosik')->middleware("auth");
 Route::post('/kosik', [ObjednavkyController::class, 'store'])->name('kosik.store')->middleware("auth");
 
-// Route::get('/uspech/{id}', [ObjednavkyController::class, ""])->name('kosik.uspech');
 Route::get('/pdfdownload/{id}', [ObjednavkyController::class, "createPDF"])->name('pdf');
 
 // recenze
 Route::get('/recenze', [RecenzeController::class, 'create'])->name('recenze')->middleware("auth");
 Route::post('/recenze', [RecenzeController::class, 'store'])->name('recenze.store')->middleware("auth");
 
-
+// zprava
+Route::post('/poslat-email', [Menu_A_NapojeController::class, 'poslatEmail'])->name('zprava.email');
 
 
 
@@ -65,6 +66,19 @@ Route::prefix('/dashboard/stale-menu')->middleware(['auth', 'verified', AdminMid
 
     //Smazání menu z webu
     Route::patch('/smazat/{id}', [StaleMenuController::class, 'destroy'])->name('stale_menu.destroy');
+});
+
+// Dashboard pro objednávky
+Route::prefix('/dashboard/objednavky')->middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
+    Route::get("/", [ObjednavkyController::class, "index"])->name("objednavky.index");
+
+    Route::get('/{id}', [ObjednavkyController::class, 'show'])->name('objednavka.show');
+    Route::post('/{id}', [ObjednavkyController::class, 'dokonceni'])->name('objednavka.dokoncit');
+});
+
+// Dashboard pro objednávky
+Route::prefix('/dashboard/statistiky')->middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
+    Route::get('/jedna', [StatistikyController::class, 'jedna'])->name('statistiky.jedna');
 });
 
 

@@ -35,4 +35,9 @@ class Objednavky extends Model
     {
         return $this->belongsTo(TypDopravy::class, 'typ_dopravy_id');
     }
+
+    public function prodVObj()
+    {
+        return $this->hasMany(Prod_V_Obj::class, 'objednavky_id');
+    }
 }
